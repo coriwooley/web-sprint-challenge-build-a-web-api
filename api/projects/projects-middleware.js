@@ -14,7 +14,7 @@ function logger(req, res, next) {
                   message: 'not found'
               })
           } else {
-              req.project = project
+              req.body.project = project
               next()
           }
       } catch(err){
@@ -34,8 +34,19 @@ function logger(req, res, next) {
       }
   }
 
+  function updateValidation(req, res, next){
+      const {completed} = req.body
+      if(!completed){
+          res.status(404)
+      } else {
+          completed
+          next()
+      }
+  }
+
   module.exports = {
       logger,
       validateId,
-      validatePost
+      validatePost,
+      updateValidation
   }

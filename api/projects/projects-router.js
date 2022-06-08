@@ -14,23 +14,33 @@ router.get('/', (req, res, next) => {
 })
 
 router.get('/:id', md.validateId, (req, res) => {
-    res.json(req.project)
+    res.json(req.body.project)
 })
 
 router.post('/', md.validatePost, (req, res, next) => {
-    Projects.insert({
-        name: req.body.name,
-        description: req.body.description,
-        completed: req.body.completed
-    })
+    const post = req.body
+    Projects.insert(post)
     .then(project => {
         res.status(201).json(project)
     })
     .catch(next)
 })
 
-router.put('/:id', (req, res) => {
-    console.log(req.method)
+router.put('/:id', 
+md.validateId, 
+md.validatePost, 
+md.updateValidation,(req, res, next) => {
+    const id = req.params.id
+    const post = req.body
+
+    Projects.update(id, post)
+    .then(() => {
+        return Projects.get(id)
+    })
+    .then(project => {
+        res.json(project)
+    })
+    .catch(next)
 })
 
 router.delete('/:id', (req, res) => {
