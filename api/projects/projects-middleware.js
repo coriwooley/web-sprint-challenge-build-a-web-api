@@ -14,7 +14,7 @@ function logger(req, res, next) {
                   message: 'not found'
               })
           } else {
-              req.body.project = project
+              req.project = project
               next()
           }
       } catch(err){
@@ -23,30 +23,28 @@ function logger(req, res, next) {
   }
 
   function validatePost(req, res, next){
-      const {name, description} = req.body
-      if(!name || !description){
+      const {name, description,completed} = req.body
+      if(!name || !description || typeof completed=== "undefined"){
           res.status(400).json({
               message: "missing required fields"
           })
       } else {
-          name, description
+          req.post = {name, description, completed}
           next()
       }
   }
 
-  function updateValidation(req, res, next){
-      const {completed} = req.body
-      if(!completed){
-          res.status(404)
-      } else {
-          completed
-          next()
-      }
-  }
+//   function updateValidation(req, res, next){
+//       const {completed} = req.body
+//       if(!completed){
+//           res.status(404)
+//       } else {
+//           next()
+//       }
+//   }
 
   module.exports = {
       logger,
       validateId,
-      validatePost,
-      updateValidation
+      validatePost
   }
