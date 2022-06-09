@@ -50,8 +50,12 @@ router.delete('/:id', md.validateId, async (req, res, next) => {
     }
 })
 
-router.get('/:id/actions', (req, res) => {
-    console.log(req.method)
+router.get('/:id/actions', md.validateId, (req, res, next) => {
+    Projects.getProjectActions(req.params.id)
+    .then(actions => {
+        res.status(200).json(actions)
+    })
+    .catch(next)
 })
 
 router.use((err, req, res, next) => {
