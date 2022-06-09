@@ -33,10 +33,22 @@ router.put('/:id', md.validateId, md.validateAction, async (req, res, next) => {
     }
 })
 
-router.delete('/:id', (req, res) => {
-    //do something here
+router.delete('/:id', md.validateId, async (req, res, next) => {
+    try{
+        await Actions.remove(req.params.id)
+        res.json(req.action)
+    } catch(err){
+        next(err)
+    }
 })
 
-
+router.use((err, req, res, next) => {
+    console.log(err)
+    res.status(500).json({
+        message1: "There was an error performing the required operation",
+        message2: err.message
+    })
+    next()
+})
 
 module.exports = router
