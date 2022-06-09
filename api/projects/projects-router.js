@@ -26,20 +26,14 @@ router.post('/', md.validatePost, (req, res, next) => {
     .catch(next)
 })
 
-router.put(
-  "/:id",
-  md.validateId,
-  md.validatePost,
-  async (req, res, next) => {
-    try {
-        const updatedPost = 
-        await Projects.update(req.params.id, req.post)
-        res.status(200).json(updatedPost)
-    } catch(err){
-        next(err)
-    }
+router.put("/:id", md.validateId, md.validatePost, async (req, res, next) => {
+  try {
+    const updatedPost = await Projects.update(req.params.id, req.post);
+    res.status(200).json(updatedPost);
+  } catch (err) {
+    next(err);
   }
-);
+});
 
 router.delete('/:id', md.validateId, async (req, res, next) => {
     try {
