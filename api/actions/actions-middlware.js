@@ -20,7 +20,17 @@ async function validateId(req, res, next){
     }
 }
 
+function validateAction(req, res, next){
+    const {project_id, description, notes, completed} = req.body
+
+    !project_id || !description || !notes || typeof completed === "undefined" ?
+    res.status(400).json('all fields required') :
+    req.action = {project_id, description, notes, completed}
+    next()
+}
+
 module.exports = {
     logger,
-    validateId
+    validateId,
+    validateAction
 }

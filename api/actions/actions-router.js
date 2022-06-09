@@ -12,12 +12,16 @@ router.get('/', (req, res) => {
     })
 })
 
-router.get('/:id', md.validateId, (req, res, next) => {
+router.get('/:id', md.validateId, (req, res) => {
     res.json(req.action)
 })
 
-router.post('/', (req, res) => {
-    //do something here
+router.post('/', md.validateAction, (req, res, next) => {
+    Actions.insert(req.body)
+    .then(newAction => {
+        res.status(201).json(newAction)
+    })
+    .catch(next)
 })
 
 router.put('/:id', (req, res) => {
